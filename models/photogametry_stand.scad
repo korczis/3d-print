@@ -1,16 +1,24 @@
 echo(version=version());
 
-// Bed settings
+// Bed width
 BED_WIDTH = 50;
+
+// Bed height
 BED_HEIGHT = 5;
 
-// Bearing settings
+// Bearing inner diameter
 BEARING_DIAMETER_INNER = 8.15;
+
+// Bearing outter diameter
 BEARING_DIAMETER_OUTTER = 21.5;
+
+// Bearing height
 BERING_HEIGHT = 6.5;
 
-// Plate settings
-PLATE_DIAMETER = BED_WIDTH / 2;
+// Top plate diameter
+PLATE_DIAMETER = BED_WIDTH; // BED_WIDTH / 2;
+
+// Top plate height
 PLATE_HEIGHT = BED_HEIGHT; // 10;
 
 // Helper function for ring
@@ -28,12 +36,23 @@ module photogametry_stand() {
     
     // Pylon
     pylon_height = BERING_HEIGHT * 3 + BED_HEIGHT;
-    cylinder(pylon_height, BEARING_DIAMETER_INNER / 2 * 1.1,  BEARING_DIAMETER_OUTTER / 2, center = false);
+    cylinder(pylon_height, BEARING_DIAMETER_INNER / 2 * 1.1, BEARING_DIAMETER_OUTTER / 2, center = false);
    
     // Plate
     // translate([100, 100, 1000]);
     // cylinder(10, 10, center = false);
     // ring(BERING_HEIGHT, BEARING_DIAMETER_OUTTER * 2, BEARING_DIAMETER_OUTTER, 100);
+}
+
+module photogametry_mount() {
+    difference() {
+        cylinder(h = BERING_HEIGHT * 3, r = BEARING_DIAMETER_OUTTER / 2 * 1.25);
+        cylinder(h = BERING_HEIGHT * 2.5, r1 = BEARING_DIAMETER_OUTTER * 1.1 / 2, r2 = BEARING_DIAMETER_OUTTER * 0.95 / 2);
+    }
+    
+    translate([0, 0, BERING_HEIGHT * 2.8]) {
+    cylinder(h = PLATE_HEIGHT, r = PLATE_DIAMETER, center = false);
+    }
 }
 
 // Top plate
@@ -53,8 +72,11 @@ module main() {
     // Stand
     // photogametry_stand();
     
+    // Mount
+    photogametry_mount();
+    
     // Top plate
-    photogametry_plate();
+    // photogametry_plate();
 }
 
 // Render main object
